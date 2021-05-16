@@ -9,12 +9,15 @@ namespace ReservationAPI.Models
     public class Reservation
     {
         public int ReservationId { get; set; }
+
         [Required]
         public int UserId { get; set; }
-        // public User User { get; set }
+        public User User { get; set; }
+
         [Required]
         public int FromId { get; set; }
         public Stop From { get; set; }
+
         [Required]
         public int ToId { get; set; }
         public Stop To { get; set; }

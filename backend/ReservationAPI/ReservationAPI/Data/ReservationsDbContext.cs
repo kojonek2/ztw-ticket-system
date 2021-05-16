@@ -8,7 +8,7 @@ using ReservationAPI.Models;
 
 namespace ReservationAPI.Data
 {
-    public class ReservationsDbContext:IdentityDbContext
+    public class ReservationsDbContext : DbContext
     {
         public ReservationsDbContext(DbContextOptions<ReservationsDbContext> options) : base(options)
         {
@@ -25,6 +25,8 @@ namespace ReservationAPI.Data
         public DbSet<TicketType> TicketTypes { get; set; }
         public DbSet<Train> Trains { get; set; }
         public DbSet<TrainCars> TrainCars { get; set; }
+
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

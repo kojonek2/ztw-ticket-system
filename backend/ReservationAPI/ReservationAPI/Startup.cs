@@ -13,11 +13,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ReservationAPI.Services;
+using ReservationAPI.Utils;
 
 namespace ReservationAPI
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,8 +32,20 @@ namespace ReservationAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader();
+                                  });
+            });
+
             services.AddDbContextPool<ReservationsDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TrainReservationDb")));
+
+            services.AddControllers();
+
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,7 +60,8 @@ namespace ReservationAPI
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseCors(MyAllowSpecificOrigins);
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
