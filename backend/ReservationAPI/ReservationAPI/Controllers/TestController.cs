@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ReservationAPI.Models;
 using ReservationAPI.Utils;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,8 @@ namespace ReservationAPI.Controllers
         [Route("test")]
         public IActionResult Test()
         {
-            return Ok("Testowy tajny ciąg");
+            User user = HttpContext.Items[Constants.UserKey] as User;
+            return Ok($"Testowy tajny ciąg. User: {user.Login}");
         }
 
         [Route("password/{password}")]

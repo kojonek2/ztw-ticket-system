@@ -1,16 +1,18 @@
 <template>
-  <div id="app">
-    
-    <form v-on:submit.prevent="logIn" v-if="token == null">
-      <input v-model="login" type="text">
-      <input v-model="password" type="password">
-      <input type="submit" value="Log in">
-    </form>
-    <div v-google-signin-button="clientId" class="g-signin2" v-if="token == null"></div>
-
-    <p>
-      {{this.response}}
-    </p>
+  <div id="app" class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center flex-column col-4">
+      <form v-on:submit.prevent="logIn" v-if="token == null">
+        <input v-model="login" type="text" class="form-control">
+        <input v-model="password" type="password" class="form-control">
+        <input type="submit" value="Log in" class="btn btn-primary">
+      </form>
+      <div class="d-inline-flex flex justify-content-center">
+        <div v-google-signin-button="clientId" class="g-signin2" v-if="token == null"></div>
+      </div>
+      <p>
+        {{this.response}}
+      </p>
+    </div>
   </div>
 </template>
 

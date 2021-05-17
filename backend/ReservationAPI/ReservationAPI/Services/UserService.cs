@@ -82,7 +82,7 @@ namespace ReservationAPI.Services
             User user = _context.Users.FirstOrDefault(u => u.Login == tokenInfo.email && u.UserType == UserType.Google);
             if (user == null) //login not found! Create user
             {
-                user = new User() { Login = tokenInfo.email, UserType = UserType.Google};
+                user = new User() { Login = tokenInfo.email, UserType = UserType.Google, Email = tokenInfo.email};
                 _context.Users.Add(user);
                 _context.SaveChanges();
             }
