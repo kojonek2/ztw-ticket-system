@@ -1,0 +1,92 @@
+<template>
+    <div class="d-flex justify-content-center flex-column col-4">
+        <logo-with-texts></logo-with-texts>
+        <form v-on:submit.prevent="logIn" v-if="token == null">
+            <div class="form-group">
+                <label class='mb-1'>Login</label>
+                <input v-model="login" type="text" class="form-control mb-3" placeholder="Enter login" />
+            </div>
+
+            <div class="form-group">
+                <label class='mb-1'>Password</label>
+                <input v-model="password" type="password" class="form-control mb-3" placeholder="Password" />
+            </div>
+
+            <input type="submit" value="Log in" class="btn btn-primary" />
+        </form>
+        <div class="d-inline-flex flex justify-content-center">
+            <div
+                v-google-signin-button="clientId"
+                class="g-signin2"
+                v-if="token == null"
+            ></div>
+        </div>
+        <p>
+            {{ this.response }}
+        </p>
+    </div>
+</template>
+
+<script>
+import auth from "../auth";
+import GoogleSignInButton from "vue-google-signin-button-directive";
+
+import LogoWithTexts from '../components/LogoWithTexts.vue';
+
+export default {
+    name: "LoginPage",
+    directives: {
+        GoogleSignInButton,
+    },
+    components: {
+        LogoWithTexts
+    },
+    data() {
+        return {
+            token: null,
+            login: "",
+            password: "",
+            response: "",
+            clientId:
+                "512875819210-kj997qkdnvsn3reuf6a1ee4egfu97ns3.apps.googleusercontent.com",
+        };
+    },
+    methods: {
+        logIn: async function () {
+            if (this.login == "" || this.password == "")
+                return;
+
+            const success = await auth.login(this.login, this.password);
+            this.loginResponse(success);
+        },
+        loginResponse: function (success) {
+            if (!success) {
+                this.response = "Błąd podczas logowania";
+                return;
+            }
+
+            this.$router.push(this.$route.query.redirect || "/");
+        },
+        async OnGoogleAuthSuccess(idToken) {
+            const success = await auth.loginGoogle(idToken);
+            this.loginResponse(success);
+        },
+        OnGoogleAuthFail(error) {
+            console.log(error);
+        },
+    },
+    mounted() {
+        if (this.$route.meta.logOut) {
+            auth.logOut();
+            this.$router.push("/");
+        }
+
+        if (auth.logedIn) {
+            this.$router.push(this.$route.query.redirect || "/");
+        }
+    }
+};
+</script>
+
+<style>
+</style>
