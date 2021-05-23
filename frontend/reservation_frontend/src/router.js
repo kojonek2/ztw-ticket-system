@@ -5,6 +5,7 @@ import Foo from './Foo.vue'
 import Bar from './Bar.vue'
 import LoginPage from './pages/LoginPage.vue'
 import TestPage from './pages/TestPage.vue'
+import TestLoadPage from './pages/TestLoadPage.vue'
 
 import auth from './auth'
 
@@ -14,6 +15,7 @@ const routes = [
     { path: '/login', component: LoginPage},
     { path: '/logOut', component: LoginPage, meta: { logOut: true } },
     { path: '/test', component: TestPage},
+    { path: '/load/:name', component: TestLoadPage},
   ]
 
 const router = new VueRouter({
