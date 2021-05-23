@@ -1,25 +1,31 @@
 <template>
     <div class="d-flex justify-content-center flex-column col-4">
         <logo-with-texts></logo-with-texts>
-        <form v-on:submit.prevent="logIn" v-if="token == null">
+        <form v-on:submit.prevent="logIn">
             <div class="form-group">
-                <label class='mb-1'>Login</label>
-                <input v-model="login" type="text" class="form-control mb-3" placeholder="Enter login" />
+                <label class="mb-1">Login</label>
+                <input
+                    v-model="login"
+                    type="text"
+                    class="form-control mb-3"
+                    placeholder="Enter login"
+                />
             </div>
 
             <div class="form-group">
-                <label class='mb-1'>Password</label>
-                <input v-model="password" type="password" class="form-control mb-3" placeholder="Password" />
+                <label class="mb-1">Password</label>
+                <input
+                    v-model="password"
+                    type="password"
+                    class="form-control mb-3"
+                    placeholder="Password"
+                />
             </div>
 
             <input type="submit" value="Log in" class="btn btn-primary" />
         </form>
         <div class="d-inline-flex flex justify-content-center">
-            <div
-                v-google-signin-button="clientId"
-                class="g-signin2"
-                v-if="token == null"
-            ></div>
+            <div id="signInButton"></div>
         </div>
         <p>
             {{ this.response }}
@@ -29,21 +35,16 @@
 
 <script>
 import auth from "../auth";
-import GoogleSignInButton from "vue-google-signin-button-directive";
 
-import LogoWithTexts from '../components/LogoWithTexts.vue';
+import LogoWithTexts from "../components/LogoWithTexts.vue";
 
 export default {
     name: "LoginPage",
-    directives: {
-        GoogleSignInButton,
-    },
     components: {
-        LogoWithTexts
+        LogoWithTexts,
     },
     data() {
         return {
-            token: null,
             login: "",
             password: "",
             response: "",
@@ -53,8 +54,7 @@ export default {
     },
     methods: {
         logIn: async function () {
-            if (this.login == "" || this.password == "")
-                return;
+            if (this.login == "" || this.password == "") return;
 
             const success = await auth.login(this.login, this.password);
             this.loginResponse(success);
@@ -67,8 +67,8 @@ export default {
 
             this.$router.push(this.$route.query.redirect || "/");
         },
-        async OnGoogleAuthSuccess(idToken) {
-            const success = await auth.loginGoogle(idToken);
+        async OnGoogleAuthSuccess(info) {
+            const success = await auth.loginGoogle(info.qc.id_token);
             this.loginResponse(success);
         },
         OnGoogleAuthFail(error) {
@@ -84,7 +84,15 @@ export default {
         if (auth.logedIn) {
             this.$router.push(this.$route.query.redirect || "/");
         }
-    }
+
+        window.gapi.signin2.render('signInButton',
+            {
+                'onsuccess': this.OnGoogleAuthSuccess,
+                'onfailure': this.OnGoogleAuthFail,
+                'scope':'https://www.googleapis.com/auth/plus.login'
+            }
+        );
+    },
 };
 </script>
 

@@ -4,6 +4,7 @@ const { default: VueRouter } = require("vue-router");
 import Foo from './Foo.vue'
 import Bar from './Bar.vue'
 import LoginPage from './pages/LoginPage.vue'
+import TestPage from './pages/TestPage.vue'
 
 import auth from './auth'
 
@@ -12,6 +13,7 @@ const routes = [
     { path: '/bar', component: Bar, meta: { requireLogin: true } },
     { path: '/login', component: LoginPage},
     { path: '/logOut', component: LoginPage, meta: { logOut: true } },
+    { path: '/test', component: TestPage},
   ]
 
 const router = new VueRouter({

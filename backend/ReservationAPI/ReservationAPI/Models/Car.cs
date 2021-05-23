@@ -14,9 +14,7 @@ namespace ReservationAPI.Models
         public String Name { get; set; }
         public int TrainCarId { get; set; }
         public TrainCars TrainCar { get; set; }
-        [ForeignKey("Graphic")]
-        public int GraphicId { get; set; }
-        public Graphic Graphic { get; set; }
+        public ICollection<Graphic> Graphics { get; set; }
         public ICollection<Place> Places { get; set; }
     }
 }

@@ -42,10 +42,7 @@ export default {
             user: auth.user,
         };
     },
-    name: "TopBar",
-    mounted() {
-        console.log(this.$route)
-    }
+    name: "TopBar"
 };
 </script>
 
