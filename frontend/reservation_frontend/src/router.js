@@ -2,15 +2,16 @@ const { default: VueRouter } = require("vue-router");
 
 
 import Foo from './Foo.vue'
-import Bar from './Bar.vue'
+//import Bar from './Bar.vue'
 import LoginPage from './pages/LoginPage.vue'
 import TestPage from './pages/TestPage.vue'
+import SearchPage from './pages/SearchPage.vue'
 
 import auth from './auth'
 
 const routes = [
     { path: '/', component: Foo },
-    { path: '/bar', component: Bar, meta: { requireLogin: true } },
+    { path: '/search', component: SearchPage },
     { path: '/login', component: LoginPage},
     { path: '/logOut', component: LoginPage, meta: { logOut: true } },
     { path: '/test', component: TestPage},

@@ -9,5 +9,6 @@ namespace ReservationAPI.Models
     public class Station
     {
         public int StationId { get; set; }
+        public String Name { get; set; }
     }
 }
