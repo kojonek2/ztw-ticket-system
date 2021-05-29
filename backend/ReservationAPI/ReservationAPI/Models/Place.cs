@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ReservationAPI.Models
 {
@@ -19,7 +20,10 @@ namespace ReservationAPI.Models
         public double Width { get; set; }
         [Required]
         public double Height { get; set; }
+
         public int CarId { get; set; }
+
+        [JsonIgnore]
         public Car Car { get; set; }
     }
 }
