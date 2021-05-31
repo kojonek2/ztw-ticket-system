@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReservationAPI.Data;
 
 namespace ReservationAPI.Migrations
 {
     [DbContext(typeof(ReservationsDbContext))]
-    partial class ReservationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210523151603_Added-Station-Name")]
+    partial class AddedStationName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,6 +31,9 @@ namespace ReservationAPI.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TrainCarId")
+                        .HasColumnType("int");
 
                     b.HasKey("CarId");
 
@@ -143,9 +148,6 @@ namespace ReservationAPI.Migrations
                     b.Property<int>("TicketTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TrainCarsId")
-                        .HasColumnType("int");
-
                     b.HasKey("PlaceReservationId");
 
                     b.HasIndex("PlaceId");
@@ -153,9 +155,6 @@ namespace ReservationAPI.Migrations
                     b.HasIndex("ReservationId");
 
                     b.HasIndex("TicketTypeId");
-
-                    b.HasIndex("TrainCarsId")
-                        .IsUnique();
 
                     b.ToTable("PlaceReservations");
                 });
@@ -286,7 +285,8 @@ namespace ReservationAPI.Migrations
 
                     b.HasKey("TrainCarsId");
 
-                    b.HasIndex("CarId");
+                    b.HasIndex("CarId")
+                        .IsUnique();
 
                     b.HasIndex("TrainId");
 
@@ -381,19 +381,11 @@ namespace ReservationAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ReservationAPI.Models.TrainCars", "TrainCars")
-                        .WithOne()
-                        .HasForeignKey("ReservationAPI.Models.PlaceReservation", "TrainCarsId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Place");
 
                     b.Navigation("Reservation");
 
                     b.Navigation("TicketType");
-
-                    b.Navigation("TrainCars");
                 });
 
             modelBuilder.Entity("ReservationAPI.Models.Reservation", b =>
@@ -445,8 +437,8 @@ namespace ReservationAPI.Migrations
             modelBuilder.Entity("ReservationAPI.Models.TrainCars", b =>
                 {
                     b.HasOne("ReservationAPI.Models.Car", "Car")
-                        .WithMany("TrainCars")
-                        .HasForeignKey("CarId")
+                        .WithOne("TrainCar")
+                        .HasForeignKey("ReservationAPI.Models.TrainCars", "CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -467,7 +459,7 @@ namespace ReservationAPI.Migrations
 
                     b.Navigation("Places");
 
-                    b.Navigation("TrainCars");
+                    b.Navigation("TrainCar");
                 });
 
             modelBuilder.Entity("ReservationAPI.Models.Reservation", b =>
