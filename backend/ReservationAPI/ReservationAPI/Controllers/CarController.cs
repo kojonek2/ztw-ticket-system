@@ -23,10 +23,12 @@ namespace ReservationAPI.Controllers
         [HttpPost("car")]
         public IActionResult SaveCar(Car car)
         {
+            Car carFromDb = _context.Cars.FirstOrDefault(c => c.Name == car.Name);
+            if (carFromDb != null)
+                return Conflict();
+
             _context.Add(car);
             _context.SaveChanges();
-
-            //TODO validations and reponses
 
             return Ok();
         }

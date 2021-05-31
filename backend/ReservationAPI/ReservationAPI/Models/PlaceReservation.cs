@@ -19,5 +19,9 @@ namespace ReservationAPI.Models
         public int TicketTypeId { get; set; }
         public TicketType TicketType { get; set; }
 
+        [Required]
+        public int TrainCarsId { get; set; }
+        public TrainCars TrainCars { get; set; }
+
     }
 }

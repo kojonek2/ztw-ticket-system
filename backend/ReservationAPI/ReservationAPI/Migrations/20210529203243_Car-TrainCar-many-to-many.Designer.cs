@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReservationAPI.Data;
 
 namespace ReservationAPI.Migrations
 {
     [DbContext(typeof(ReservationsDbContext))]
-    partial class ReservationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210529203243_Car-TrainCar-many-to-many")]
+    partial class CarTrainCarmanytomany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,9 +145,6 @@ namespace ReservationAPI.Migrations
                     b.Property<int>("TicketTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TrainCarsId")
-                        .HasColumnType("int");
-
                     b.HasKey("PlaceReservationId");
 
                     b.HasIndex("PlaceId");
@@ -153,9 +152,6 @@ namespace ReservationAPI.Migrations
                     b.HasIndex("ReservationId");
 
                     b.HasIndex("TicketTypeId");
-
-                    b.HasIndex("TrainCarsId")
-                        .IsUnique();
 
                     b.ToTable("PlaceReservations");
                 });
@@ -378,19 +374,11 @@ namespace ReservationAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ReservationAPI.Models.TrainCars", "TrainCars")
-                        .WithOne()
-                        .HasForeignKey("ReservationAPI.Models.PlaceReservation", "TrainCarsId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Place");
 
                     b.Navigation("Reservation");
 
                     b.Navigation("TicketType");
-
-                    b.Navigation("TrainCars");
                 });
 
             modelBuilder.Entity("ReservationAPI.Models.Reservation", b =>

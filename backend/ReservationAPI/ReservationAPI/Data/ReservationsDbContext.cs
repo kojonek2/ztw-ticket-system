@@ -69,6 +69,11 @@ namespace ReservationAPI.Data
 
                 b.Navigation("To");
             });
+
+            modelBuilder.Entity<PlaceReservation>()
+                .HasOne(pr => pr.TrainCars)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
     }

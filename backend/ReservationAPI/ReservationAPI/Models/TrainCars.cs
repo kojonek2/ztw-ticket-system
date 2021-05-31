@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ReservationAPI.Models
 {
@@ -17,6 +18,8 @@ namespace ReservationAPI.Models
         [Required]
         [ForeignKey("Train")]
         public int TrainId { get; set; }
+
+        [JsonIgnore]
         public Train Train { get; set; }
         [Required]
         [ForeignKey("Car")]

@@ -2,166 +2,112 @@
     <div class="d-flex flex-column align-items-center w-100">
         <top-bar></top-bar>
 
-        <canvas id="c" width="1000" height="400"></canvas>
-        <div>
-            Wybrane miejsca:
-            <div v-for="place in pickedPlaces" :key="place.placeId">Miejsce numer: {{place.number}}</div>
+        <div class="d-flex justify-content-between col-6 mt-4">
+            <div class="border border-dark p-3 rounded trainCarList mt-5">
+                <div class="d-flex align-items-center border border-dark rounded p-2 m-1" v-for="trainCar in train.trainCars" :key="trainCar.trainCarsId">
+                    <div>Wagon nr. {{trainCar.number}} | Wolne: x</div>
+                    <button class="btn btn-primary btn-sm ms-2" v-if="trainCar.trainCarsId != trainCarId" v-on:click="pickTrainCar(trainCar.trainCarsId.toString())">Wybierz</button>
+                    <div class="flex-grow-1 text-center btn btn-sm" v-else>wybrany</div>
+                </div>
+            </div>
+
+            <div>
+                Wybrane miejsca:
+                <div class="border border-dark p-3 rounded trainPlacesList">
+                    <div class="border border-dark rounded p-2 m-1 pre" v-for="place in pickedPlaces" :key="place.trainCartNumber.toString() + place.placeNumber.toString()">
+                        Miejsce: {{place.placeNumber.toString().padStart(3, ' ')}} | Wagon: {{place.trainCartNumber.toString().padStart(3, ' ')}}
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <div v-if="trainCarNumber != ''">Wagon nr. {{trainCarNumber}}</div>
+        <pick-place-canvas v-bind:train="train" :trainCarId="trainCarId" />
     </div>
 </template>
 
 <script>
 import TopBar from "../components/TopBar.vue";
-import { fabric } from "fabric";
-import axios from "axios";
+import PickPlaceCanvas from "../components/PickPlaceCanvas.vue"
+import axios from 'axios'
 
 export default {
     components: {
         TopBar,
+        PickPlaceCanvas,
     },
     name: "TestLoadPage",
     data: function () {
         return {
-            canvas: null,
-            pickedPlaces: [],
+            train: null,
+            trainCarId: "-1",
         };
     },
-    methods: {
-        createPlace: function () {
-            var rect = new fabric.Rect({
-                fill: "rgba(0,0,0,0)",
-                width: 50,
-                height: 50,
-                strokeWidth: 4,
-                stroke: "black",
-                originX: "center",
-                originY: "center",
-                strokeUniform: true,
-            });
-            var t = new fabric.Text("1", {
-                fontSize: 40,
-                fontFamily: "Arial",
-                fontWeight: "bold",
-                originX: "center",
-                originY: "center",
-            });
-            this.number++;
+    computed: {
+        trainCarNumber: function() {
+            if (this.train == null)
+                return ""
+            
+            var trainCar = this.train.trainCars.find(tc => tc.trainCarsId == this.trainCarId)
+            if (trainCar == null)
+                return ""
 
-            var group = new fabric.Group([rect, t], {
-                left: 150,
-                top: 100,
-                fill: "red",
-                myType: "place",
-                hoverCursor: "pointer",
-                selectable: false,
-            });
-            group.controls = {
-                ...fabric.Group.prototype.controls,
-                mtr: new fabric.Control({ visible: false }),
-            };
-
-            this.canvas.add(group);
-            return group;
+            return trainCar.number
         },
-        createRect: function () {
-            var rect = new fabric.Rect({
-                fill: "rgba(0,0,0,0)",
-                top: 150,
-                left: 150,
-                width: 200,
-                height: 200,
-                originX: "center",
-                originY: "center",
-                strokeWidth: 2,
-                stroke: "black",
-                hasRotatingPoint: false,
-                strokeUniform: true,
-                myType: "rect",
-                selectable: false,
-                hoverCursor: "default",
-            });
-            rect.controls = {
-                ...fabric.Rect.prototype.controls,
-                mtr: new fabric.Control({ visible: false }),
-            };
+        pickedPlaces: function() {
+            if (this.train == null)
+                return []
 
-            this.canvas.add(rect);
-            return rect;
-        },
-        bringPlacesToFront: function () {
-            this.frotnRect = !this.frotnRect;
-
-            this.canvas.getObjects().forEach((object) => {
-                if (object.myType == "place") {
-                    this.canvas.bringToFront(object);
-                }
-            });
-        },
-        load: async function () {
-            try {
-                var response = await axios.get(
-                    "/car/" + this.$route.params.name
-                );
-            } catch {
-                return;
-            }
-
-            var car = response.data;
-            car.places.forEach((place) => {
-                const p = this.createPlace();
-                p.left = place.x * this.canvas.width;
-                p.top = place.y * this.canvas.height;
-                p.scaleX = (place.width * this.canvas.width) / p.width;
-                p.scaleY = (place.height * this.canvas.height) / p.height;
-                p.placeId = place.placeId;
-
-                p.item(1).text = place.number.toString();
-                p.setCoords();
-
-                p.on("mouseup", () => {
-                    if (this.pickedPlaces.includes(place)) {
-                        const index = this.pickedPlaces.indexOf(place)
-                        this.pickedPlaces.splice(index, 1)
-
-                        p.item(0).set({ fill: 'rgba(0,0,0,0)' })
-                        this.canvas.renderAll()
-
-                    } else {
-                        this.pickedPlaces.push(place)
-
-                        p.item(0).set({ fill: 'green' })
-                        this.canvas.renderAll()
+            const places = []
+            this.train.trainCars.forEach(tc => {
+                tc.car.places.forEach(p => {
+                    if (p.picked) {
+                        places.push({ trainCartNumber: tc.number, placeNumber: p.number})
                     }
-                });
-            });
+                })
+            })
 
-            car.graphics.forEach((graphic) => {
-                var g;
-                if (graphic.type == "rect") g = this.createRect();
-
-                if (g != undefined) {
-                    g.left = graphic.x * this.canvas.width;
-                    g.top = graphic.y * this.canvas.height;
-                    g.scaleX = (graphic.width * this.canvas.width) / g.width;
-                    g.scaleY = (graphic.height * this.canvas.height) / g.height;
-                    g.setCoords();
-                }
-            });
-        },
+            return places
+        }
+    },
+    methods: {
+        pickTrainCar: function(val) {
+            this.trainCarId = val
+        }
     },
     async mounted() {
-        this.canvas = new fabric.Canvas("c", {
-            preserveObjectStacking: true,
-        });
-        this.canvas.selection = false;
+        try {
+            var response = await axios.get(
+                "/train/" + this.$route.params.name
+            );
+        } catch {
+            return;
+        }
 
-        await this.load();
+        this.train = response.data
+        this.train.trainCars.sort((a, b) => {
+            return a.order - b.order;
+        })
 
-        this.bringPlacesToFront();
-        this.canvas.renderAll();
+        if (this.train.trainCars.length > 0)
+            this.trainCarId = this.train.trainCars[0].trainCarsId
     },
 };
 </script>
 
 <style>
+.trainCarList {
+    height: 200px;
+    overflow: auto;
+}
+
+.trainPlacesList {
+    height: 200px;
+    width: 260px;
+    overflow-y: scroll;
+}
+
+.pre {
+    white-space: pre;
+}
 </style>

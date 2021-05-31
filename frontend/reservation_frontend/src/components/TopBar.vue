@@ -1,6 +1,6 @@
 <template>
-    <div class="d-flex justify-content-center align-items-center flex-column">
-        <div class="d-flex justify-content-center align-items-center">
+    <div class="d-flex justify-content-center align-items-center flex-column col-6">
+        <div class="d-flex justify-content-between align-items-center w-100">
             <logo-with-texts />
             <div class="p-3 ms-5 border border-primary rounded">
                 <div
