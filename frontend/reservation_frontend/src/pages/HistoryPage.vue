@@ -1,5 +1,5 @@
 <template>
-    <div id="History" class="col-6 mt-2">
+    <div id="History" class="d-flex flex-column align-items-center mt-2 w-100">
         <top-bar></top-bar>
         <div v-if="error" class="alert alert-danger" role="alert">
             Searching failed!
@@ -9,7 +9,7 @@
         </div>
 
         <hr>
-        <history-table class="ms-5 me-5" :reservationsSource="reservations" />
+        <history-table class="ms-5 me-5 col-6" :reservationsSource="reservations" />
 
     </div>
 </template>

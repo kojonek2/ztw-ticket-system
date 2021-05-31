@@ -1,5 +1,5 @@
 <template>
-    <div id="Search" class="col-6 mt-2">
+    <div id="Search" class="d-flex flex-column align-items-center mt-2 w-100">
         <top-bar></top-bar>
         <div v-if="error" class="alert alert-danger" role="alert">
             Searching failed!
@@ -8,9 +8,9 @@
             Ok.
         </div>
         <hr>
-        <search-form class="ms-5 me-5" :stationsSource="stations" @save:search="sendSearch" />
+        <search-form class="ms-5 me-5 col-6" :stationsSource="stations" @save:search="sendSearch" />
         <hr>
-        <search-result-table v-if="fromStation != '' && toStation != ''" class="ms-5 me-5" :connSource="connections" :fromStation="fromStation" :toStation="toStation" />
+        <search-result-table v-if="fromStation != '' && toStation != ''" class="ms-5 me-5 col-6" :connSource="connections" :fromStation="fromStation" :toStation="toStation" />
 
     </div>
 </template>
