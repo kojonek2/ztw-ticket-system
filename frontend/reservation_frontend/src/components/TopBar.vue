@@ -18,7 +18,7 @@
             <div class="navbar-nav">
                 <router-link class="nav-item nav-link" to='/' v-bind:class="{ active: $route.path == '/'}">Strona główna</router-link>
                 <router-link class="nav-item nav-link" to='/search' v-bind:class="{ active: $route.path == '/search'}">Wyszukaj połączenie</router-link>
-                <router-link class="nav-item nav-link" to='/'>Historia rezerwacji</router-link>
+                <router-link class="nav-item nav-link" to='/history' v-bind:class="{ active: $route.path == '/history'}">Historia rezerwacji</router-link>
             </div>
             <div class="navbar-nav">
                 <router-link v-if="!logedIn" class="nav-item nav-link" to='/login'>Logowanie do systemu</router-link>

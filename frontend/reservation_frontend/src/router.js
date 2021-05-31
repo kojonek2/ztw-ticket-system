@@ -6,13 +6,17 @@ import Foo from './Foo.vue'
 import LoginPage from './pages/LoginPage.vue'
 import TestPage from './pages/TestPage.vue'
 import SearchPage from './pages/SearchPage.vue'
+import HistoryPage from './pages/HistoryPage.vue'
+import HistoryDetailsPage from './pages/HistoryDetailsPage.vue'
 import TestLoadPage from './pages/TestLoadPage.vue'
 
 import auth from './auth'
 
 const routes = [
     { path: '/', component: Foo },
-    { path: '/search', component: SearchPage },
+    { path: '/search', component: SearchPage, meta: { requireLogin: true } },
+    { path: '/history', component: HistoryPage, meta: { requireLogin: true } },
+    { path: '/history/:id', component: HistoryDetailsPage, meta: { requireLogin: true } },
     { path: '/login', component: LoginPage},
     { path: '/logOut', component: LoginPage, meta: { logOut: true } },
     { path: '/test', component: TestPage},

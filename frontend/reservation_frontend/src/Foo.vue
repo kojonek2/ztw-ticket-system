@@ -1,7 +1,8 @@
 <template>
-	<div>
+	<div class="col-6 mt-2">
 		<top-bar></top-bar>
-		<div>Foo</div>
+		<hr>
+		<div>Tutaj będzie strona główna</div>
 	</div>
 </template>
 

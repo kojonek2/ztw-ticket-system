@@ -1,6 +1,5 @@
 <template>
     <div id="search-form">
-        <br>
         <form @submit.prevent="handleSubmit">
             <div class="form-group mb-3">
                 <label for="example-datepicker">Wybierz datę odjazdu</label>

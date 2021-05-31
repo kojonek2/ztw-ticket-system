@@ -1,28 +1,30 @@
 <template>
     <div class="d-flex justify-content-center flex-column col-4">
         <logo-with-texts></logo-with-texts>
+        <br>
+        <br>
         <form v-on:submit.prevent="logIn">
             <div class="form-group">
-                <label class="mb-1">Login</label>
+                <label class="mb-1">Nazwa użytkownika</label>
                 <input
                     v-model="login"
                     type="text"
                     class="form-control mb-3"
-                    placeholder="Enter login"
+                    placeholder="Wpisz nazwę użytkownika"
                 />
             </div>
 
             <div class="form-group">
-                <label class="mb-1">Password</label>
+                <label class="mb-1">Hasło</label>
                 <input
                     v-model="password"
                     type="password"
                     class="form-control mb-3"
-                    placeholder="Password"
+                    placeholder="Wpisz hasło"
                 />
             </div>
 
-            <input type="submit" value="Log in" class="btn btn-primary" />
+            <input type="submit" value="Zaloguj się" class="btn btn-primary" />
         </form>
         <div class="d-inline-flex flex justify-content-center">
             <div id="signInButton"></div>

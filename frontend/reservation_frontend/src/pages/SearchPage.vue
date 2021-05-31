@@ -7,7 +7,7 @@
         <div v-if="success" class="alert alert-success" role="alert">
             Ok.
         </div>
-
+        <hr>
         <search-form class="ms-5 me-5" :stationsSource="stations" @save:search="sendSearch" />
         <hr>
         <search-result-table v-if="fromStation != '' && toStation != ''" class="ms-5 me-5" :connSource="connections" :fromStation="fromStation" :toStation="toStation" />
