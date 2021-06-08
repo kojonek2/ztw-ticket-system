@@ -8,7 +8,8 @@ import TestPage from './pages/TestPage.vue'
 import SearchPage from './pages/SearchPage.vue'
 import HistoryPage from './pages/HistoryPage.vue'
 import HistoryDetailsPage from './pages/HistoryDetailsPage.vue'
-import TestLoadPage from './pages/TestLoadPage.vue'
+import PickPlacePage from './pages/PickPlacePage.vue'
+import ConfirmTicketsPage from './pages/ConfirmTicketsPage.vue'
 
 import auth from './auth'
 
@@ -20,7 +21,8 @@ const routes = [
     { path: '/login', component: LoginPage},
     { path: '/logOut', component: LoginPage, meta: { logOut: true } },
     { path: '/test', component: TestPage},
-    { path: '/load/:name', component: TestLoadPage},
+    { path: '/pickPlace/:trainId/:fromId/:toId', component: PickPlacePage,  meta: { requireLogin: true } },
+    { path: '/confirmTicket', name:'confirmTicket', component: ConfirmTicketsPage, props: true, meta: { requireLogin: true }}
   ]
 
 const router = new VueRouter({

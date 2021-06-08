@@ -5,22 +5,38 @@
         <div class="d-flex justify-content-between col-6 mt-4">
             <div class="border border-dark p-3 rounded trainCarList mt-5">
                 <div class="d-flex align-items-center border border-dark rounded p-2 m-1" v-for="trainCar in train.trainCars" :key="trainCar.trainCarsId">
-                    <div>Wagon nr. {{trainCar.number}} | Wolne: x</div>
-                    <button class="btn btn-primary btn-sm ms-2" v-if="trainCar.trainCarsId != trainCarId" v-on:click="pickTrainCar(trainCar.trainCarsId.toString())">Wybierz</button>
+                    <div class="pre">Wagon nr. {{trainCar.number}} | Wolne: {{trainCar.car.places.filter(p => !p.occupied).length}}</div>
+                    <button class="btn btn-primary btn-sm ms-2" v-if="trainCar.trainCarsId != trainCarId" v-on:click="pickTrainCar(trainCar.trainCarsId)">Wybierz</button>
                     <div class="flex-grow-1 text-center btn btn-sm" v-else>wybrany</div>
                 </div>
             </div>
 
-            <div>
-                Wybrane miejsca:
-                <div class="border border-dark p-3 rounded trainPlacesList">
-                    <div class="border border-dark rounded p-2 m-1 pre" v-for="place in pickedPlaces" :key="place.trainCartNumber.toString() + place.placeNumber.toString()">
-                        Miejsce: {{place.placeNumber.toString().padStart(3, ' ')}} | Wagon: {{place.trainCartNumber.toString().padStart(3, ' ')}}
+            <div class="d-flex flex-column align-items-center">
+                <div>
+                    Wybrane miejsca:
+                    <div class="border border-dark p-3 rounded trainPlacesList">
+                        <div class="border border-dark rounded p-2 m-1 pre" v-for="place in pickedPlaces" :key="place.trainCartNumber.toString() + place.placeNumber.toString()">
+                            Miejsce: {{place.placeNumber.toString().padStart(3, ' ')}} | Wagon: {{place.trainCartNumber.toString().padStart(3, ' ')}}
+                        </div>
                     </div>
                 </div>
+
+                <router-link v-bind:class="{ disabled: pickedPlaces.length <= 0 }" class="btn btn-success mt-3" 
+                :to="{ 
+                    name: 'confirmTicket', 
+                    params: {
+                        pickedPlaces: pickedPlaces,
+                        fromId: $route.params.fromId,
+                        toId: $route.params.toId,
+                        trainId: $route.params.trainId,
+                    }
+                }">
+                    Kup bilet
+                </router-link>
+                
             </div>
         </div>
-
+        
         <div v-if="trainCarNumber != ''">Wagon nr. {{trainCarNumber}}</div>
         <pick-place-canvas v-bind:train="train" :trainCarId="trainCarId" />
     </div>
@@ -36,7 +52,7 @@ export default {
         TopBar,
         PickPlaceCanvas,
     },
-    name: "TestLoadPage",
+    name: "PickPlacePage",
     data: function () {
         return {
             train: null,
@@ -68,7 +84,7 @@ export default {
             })
 
             return places
-        }
+        },
     },
     methods: {
         pickTrainCar: function(val) {
@@ -78,7 +94,15 @@ export default {
     async mounted() {
         try {
             var response = await axios.get(
-                "/train/" + this.$route.params.name
+                "/train/" + this.$route.params.trainId
+            );
+        } catch {
+            return;
+        }
+
+        try {
+            var responseOccupiedPlaces = await axios.get(
+                "/train/" + this.$route.params.trainId + "/occupiedPlaces/" + this.$route.params.fromId + "/" + this.$route.params.toId
             );
         } catch {
             return;
@@ -87,6 +111,17 @@ export default {
         this.train = response.data
         this.train.trainCars.sort((a, b) => {
             return a.order - b.order;
+        })
+
+        responseOccupiedPlaces.data.forEach(o => {
+            var trainCar = this.train.trainCars.find(c => c.trainCarsId == o.trainCarId)
+            if (trainCar != undefined) {
+
+                var place = trainCar.car.places.find(p => p.placeId == o.placeId)
+                if (place != undefined) {
+                    this.$set(place, "occupied", true)
+                }
+            }
         })
 
         if (this.train.trainCars.length > 0)
@@ -109,5 +144,10 @@ export default {
 
 .pre {
     white-space: pre;
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
 }
 </style>

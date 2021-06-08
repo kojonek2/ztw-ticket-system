@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ReservationAPI.Data;
 using ReservationAPI.Models;
 using ReservationAPI.Utils;
@@ -18,6 +19,12 @@ namespace ReservationAPI.Controllers
         public TicketsController(ReservationsDbContext context)
         {
             _context = context;
+        }
+
+        [HttpGet("ticketTypes")]
+        public IActionResult GetTicketTypes()
+        {
+            return Ok(_context.TicketTypes.ToList());
         }
 
         [Authorize]
@@ -41,18 +48,18 @@ namespace ReservationAPI.Controllers
 
             List<TicketResponse> array = new List<TicketResponse>();
 
-            var tickets = _context.PlaceReservations.Where(p => p.ReservationId == resId);
+            var tickets = _context.PlaceReservations.Where(p => p.ReservationId == resId)
+                .Include(pr => pr.TrainCars).Include(pr => pr.Place).Include(pr => pr.TicketType);
 
             foreach (PlaceReservation ticket in tickets)
             {
-                var place = _context.Places.First(p => p.PlaceId == ticket.PlaceId);
                 array.Add(new TicketResponse()
                 {
                     Id = ticket.PlaceReservationId,
-                    Place = place.Number,
-                    Car = _context.Cars.First(c => c.CarId == place.CarId).Name,
-                    Sort = _context.TicketTypes.First(t => t.TicketTypeId == ticket.TicketTypeId).Name,
-                    PricePercentage = _context.TicketTypes.First(t => t.TicketTypeId == ticket.TicketTypeId).PricePercentage
+                    Place = ticket.Place.Number,
+                    Car = ticket.TrainCars.number,
+                    Sort = ticket.TicketType.Name,
+                    PricePercentage = ticket.TicketType.PricePercentage
                 });
             }
 

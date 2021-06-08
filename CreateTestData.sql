@@ -68,3 +68,48 @@ INSERT [dbo].[Graphics] ([GraphicId], [X], [Y], [Type], [Width], [Height], [CarI
 INSERT [dbo].[Graphics] ([GraphicId], [X], [Y], [Type], [Width], [Height], [CarId]) VALUES (7, 0.38, 0.57248634049444125, N'rect', 0.2, 0.44502731901111764, 6)
 INSERT [dbo].[Graphics] ([GraphicId], [X], [Y], [Type], [Width], [Height], [CarId]) VALUES (8, 0.58150495049504947, 0.572486035307294, N'rect', 0.200990099009901, 0.44502792938541197, 6)
 SET IDENTITY_INSERT [dbo].[Graphics] OFF
+
+SET IDENTITY_INSERT [dbo].[Stations] ON 
+INSERT [dbo].[Stations] ([StationId], [Name]) VALUES (1, N'Leszno')
+INSERT [dbo].[Stations] ([StationId], [Name]) VALUES (2, N'Rydzyna')
+INSERT [dbo].[Stations] ([StationId], [Name]) VALUES (3, N'Kaczkowo')
+INSERT [dbo].[Stations] ([StationId], [Name]) VALUES (4, N'Bojanowo')
+INSERT [dbo].[Stations] ([StationId], [Name]) VALUES (5, N'Rawicz')
+SET IDENTITY_INSERT [dbo].[Stations] OFF
+
+SET IDENTITY_INSERT [dbo].[Connections] ON 
+INSERT [dbo].[Connections] ([ConnectionId], [FirstStationId], [SecondStationId], [Distance]) VALUES (1, 1, 2, 7)
+INSERT [dbo].[Connections] ([ConnectionId], [FirstStationId], [SecondStationId], [Distance]) VALUES (2, 2, 3, 3)
+INSERT [dbo].[Connections] ([ConnectionId], [FirstStationId], [SecondStationId], [Distance]) VALUES (3, 3, 4, 9)
+INSERT [dbo].[Connections] ([ConnectionId], [FirstStationId], [SecondStationId], [Distance]) VALUES (4, 4, 5, 14)
+SET IDENTITY_INSERT [dbo].[Connections] OFF
+
+SET IDENTITY_INSERT [dbo].[Stops] ON 
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (1, 1, 1, '2021-06-20T15:00:00')
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (2, 2, 1, '2021-06-20T15:12:00')
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (3, 3, 1, '2021-06-20T15:17:00')
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (4, 4, 1, '2021-06-20T15:25:00')
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (5, 5, 1, '2021-06-20T15:40:00')
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (6, 1, 2, '2021-06-20T15:30:00')
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (7, 2, 2, '2021-06-20T15:25:00')
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (8, 3, 2, '2021-06-20T15:20:00')
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (9, 4, 2, '2021-06-20T15:15:00')
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (10, 5, 2, '2021-06-20T15:10:00')
+SET IDENTITY_INSERT [dbo].[Stops] OFF
+
+SET IDENTITY_INSERT [dbo].[TicketTypes] ON 
+INSERT [dbo].[TicketTypes] ([TicketTypeId], [PricePercentage], [Name]) VALUES (1, 1, N'Normalny')
+INSERT [dbo].[TicketTypes] ([TicketTypeId], [PricePercentage], [Name]) VALUES (2, 0.51, N'Studencki 51%')
+SET IDENTITY_INSERT [dbo].[TicketTypes] OFF
+
+SET IDENTITY_INSERT [dbo].[Reservations] ON 
+INSERT [dbo].[Reservations] ([ReservationId], [UserId], [FromId], [ToId]) VALUES (1, 1, 10, 6)
+INSERT [dbo].[Reservations] ([ReservationId], [UserId], [FromId], [ToId]) VALUES (2, 1, 7, 6)
+SET IDENTITY_INSERT [dbo].[Reservations] OFF
+
+SET IDENTITY_INSERT [dbo].[PlaceReservations] ON 
+INSERT [dbo].[PlaceReservations] ([PlaceReservationId], [ReservationId], [PlaceId], [TicketTypeId], [TrainCarsId]) VALUES (1, 1, 20, 1, 6)
+INSERT [dbo].[PlaceReservations] ([PlaceReservationId], [ReservationId], [PlaceId], [TicketTypeId], [TrainCarsId]) VALUES (2, 1, 2, 2, 7)
+
+INSERT [dbo].[PlaceReservations] ([PlaceReservationId], [ReservationId], [PlaceId], [TicketTypeId], [TrainCarsId]) VALUES (3, 2, 1, 1, 7)
+SET IDENTITY_INSERT [dbo].[PlaceReservations] OFF

@@ -24,7 +24,7 @@ export default {
     },
     props: {
         train: Object,
-        trainCarId: String,
+        trainCarId: Number,
     },
     methods: {
         createPlace: function () {
@@ -116,6 +116,9 @@ export default {
                 var fill;
                 if (place.picked != undefined && place.picked) {
                     fill = "green"
+                } else if (place.occupied != undefined && place.occupied) {
+                    fill = "red"
+                    p.hoverCursor = "default"
                 } else {
                     fill = "rgba(0,0,0,0)"
                 }
@@ -125,7 +128,9 @@ export default {
                 p.setCoords();
 
                 p.on("mouseup", () => {
-                    if (place.picked != undefined && place.picked) {
+                    if (place.occupied != undefined && place.occupied) {
+                        //do nothing
+                    } else if (place.picked != undefined && place.picked) {
                         this.$set(place, "picked", false)
 
                         p.item(0).set({ fill: "rgba(0,0,0,0)" });

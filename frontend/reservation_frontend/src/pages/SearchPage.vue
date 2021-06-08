@@ -10,7 +10,7 @@
         <hr>
         <search-form class="ms-5 me-5 col-6" :stationsSource="stations" @save:search="sendSearch" />
         <hr>
-        <search-result-table v-if="fromStation != '' && toStation != ''" class="ms-5 me-5 col-6" :connSource="connections" :fromStation="fromStation" :toStation="toStation" />
+        <search-result-table v-if="fromStation != '' && toStation != ''" class="ms-5 me-5 col-6" :connSource="connections" :fromStation="fromStation" :fromStationId="fromStationId" :toStation="toStation" :toStationId="toStationId" />
 
     </div>
 </template>
@@ -34,7 +34,9 @@ export default {
             stations: {},
             connections: [],
             fromStation: '',
+            fromStationId: -1,
             toStation: '',
+            toStationId: -1,
         };
     },
     methods: {
@@ -49,7 +51,9 @@ export default {
         },
         async sendSearch(from, to, date) {
             this.fromStation = this.stations.find(s => s.stationId == from).name;
+            this.fromStationId = from;
             this.toStation = this.stations.find(s => s.stationId == to).name;
+            this.toStationId = to;
 
             const responseStations = await fetch("https://localhost:44365/connections/" + from + "/" + to + "/" + date);
             this.connections = await responseStations.json();

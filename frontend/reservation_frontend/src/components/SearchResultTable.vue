@@ -21,7 +21,7 @@
                     <td scope="row" class="align-middle">{{ fromStation }}</td>
                     <td scope="row" class="align-middle">{{ toStation }}</td>
                     <td scope="row" class="align-middle">
-                        <router-link class="btn btn-success me-3" :to="'/'">Wybierz</router-link>
+                        <router-link class="btn btn-success me-3" :to="'/pickPlace/' + conn.trainId + '/' + fromStationId + '/' + toStationId">Wybierz</router-link>
                     </td>
                 </tr>
             </tbody>
@@ -35,7 +35,9 @@ export default {
     props: {
         connSource: Array,
         fromStation: String,
+        fromStationId: Number,
         toStation: String,
+        toStationId: Number,
     },
     methods: {
         getDate(dateStr) {

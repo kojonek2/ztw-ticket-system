@@ -72,7 +72,7 @@ namespace ReservationAPI.Data
 
             modelBuilder.Entity<PlaceReservation>()
                 .HasOne(pr => pr.TrainCars)
-                .WithOne()
+                .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
         }
 
