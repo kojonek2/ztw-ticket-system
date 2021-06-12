@@ -19,6 +19,7 @@
 import TopBar from "../components/TopBar.vue";
 import SearchForm from '../components/SearchForm';
 import SearchResultTable from '../components/SearchResultTable';
+import axios from 'axios'
 
 export default {
     name: "SearchPage",
@@ -42,8 +43,8 @@ export default {
     methods: {
         async getData() {
             try {
-                const responseStations = await fetch("https://localhost:44365/stations");
-                this.stations = await responseStations.json();
+                const response = await axios.get("/stations")
+                this.stations = await response.data;
             } catch (error) {
                 console.log(error)
                 this.$router.push('/')
@@ -55,8 +56,14 @@ export default {
             this.toStation = this.stations.find(s => s.stationId == to).name;
             this.toStationId = to;
 
-            const responseStations = await fetch("https://localhost:44365/connections/" + from + "/" + to + "/" + date);
-            this.connections = await responseStations.json();
+            try {
+                console.log("/connections/" + from + "/" + to + "/" + date)
+                const response = await axios.get("/connections/" + from + "/" + to + "/" + date);
+                this.connections = await response.data;
+            } catch (error) {
+                console.log(error)
+                this.$router.push('/')
+            }
         }
     },
     mounted() {

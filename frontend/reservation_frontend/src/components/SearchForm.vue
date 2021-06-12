@@ -103,7 +103,35 @@ export default {
             var dateSplit = this.dateNoFormat.split('-')
             var timeSplit = this.time.split(':')
 
-            var dateFormat = dateSplit[0] + "-" + dateSplit[1] + "-" + dateSplit[2] + "-" + timeSplit[0] + "-" + timeSplit[1];
+            var year = dateSplit[0]
+            var month = -1
+            var day = -1
+            var hour = -1
+            var minute = -1
+
+            if(parseInt(dateSplit[1]) < 10) {
+                month = "0" + parseInt(dateSplit[1])
+            } else {
+                month = parseInt(dateSplit[1])
+            }
+            if(parseInt(dateSplit[2]) < 10) {
+                day = "0" + parseInt(dateSplit[2])
+            } else {
+                day = parseInt(dateSplit[2])
+            }
+            if(parseInt(timeSplit[0]) < 10) {
+                hour = "0" + parseInt(timeSplit[0])
+            } else {
+                hour = parseInt(timeSplit[0])
+            }
+            if(parseInt(timeSplit[1]) < 10) {
+                minute = "0" + parseInt(timeSplit[1])
+            } else {
+                minute = parseInt(timeSplit[1])
+            }
+
+            var dateFormat = year + "-" + month + "-" + day + "-" + hour + "-" + minute;
+            console.log(dateFormat)
 
             this.$emit("save:search", this.fromStationId, this.toStationId, dateFormat);
 

@@ -34,8 +34,7 @@ export default {
     methods: {
         async getData() {
             try {
-                //const responseStations = await fetch("https://localhost:44365/reservations");
-                const responseStations = await axios.get("https://localhost:44365/reservations", {
+                const responseStations = await axios.get("/reservations", {
                 headers: {
                     Authorization: `bearer ${auth.token}`
                 }

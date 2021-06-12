@@ -9,7 +9,7 @@
         </div>
 
         <hr>
-        <history-details class="ms-5 me-5 col-6" :reservation="reservation" :tickets="tickets" />
+        <history-details class="ms-5 me-5 col-6" :reservation="reservation" :tickets="tickets" :price="price" />
 
     </div>
 </template>
@@ -30,12 +30,13 @@ export default {
         return {
             reservation: {},
             tickets: [],
+            price: 0.0
         }
     },
     methods: {
         async getReservation() {
             try {
-                const response = await axios.get("https://localhost:44365/reservations/" + this.$route.params.id, {
+                const response = await axios.get("/reservations/" + this.$route.params.id, {
                 headers: {
                     Authorization: `bearer ${auth.token}`
                 }
@@ -48,7 +49,7 @@ export default {
         },
         async getTickets() {
             try {
-                const response = await axios.get("https://localhost:44365/tickets/" + this.$route.params.id, {
+                const response = await axios.get("/tickets/" + this.$route.params.id, {
                 headers: {
                     Authorization: `bearer ${auth.token}`
                 }
@@ -59,10 +60,24 @@ export default {
                 //this.$router.push('/')
             }
         },
+        async getPrice() {
+            try {
+                console.log("/price/" + this.reservation.trainId + "/" + this.reservation.fromId + "/" + this.reservation.toId)
+                var response = await axios.get(
+                "/price/" + this.reservation.trainId + "/" + this.reservation.fromId + "/" + this.reservation.toId
+            )
+                this.price = await response.data.price;
+                console.log(this.price)
+            } catch (error) {
+                console.log(error)
+                //this.$router.push('/')
+            }
+        },
     },
-    mounted() {
-        this.getReservation(),
-        this.getTickets()
+    async mounted() {
+        await this.getReservation(),
+        await this.getTickets(),
+        await this.getPrice()
     },
 };
 </script>
