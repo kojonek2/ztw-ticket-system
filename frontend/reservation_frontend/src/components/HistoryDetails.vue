@@ -41,8 +41,9 @@
                 <dt class="col-sm-4">
                     Wartość zakupu
                 </dt>
+                <br>
                 <dd class="col-sm-5">
-                    ???
+                    <b>{{this.price}} PLN</b>
                 </dd>
             </dl>
         </div>
@@ -69,20 +70,35 @@
                 </tr>
             </tbody>
         </table>
+
         <button 
             type="button"    
-            @click="$router.push('/history')" class="my-5 btn btn-outline-success">&laquo; 
+            @click="$router.push('/history')" 
+            class="my-5 btn btn-outline-success ml-15">&laquo; 
             Powrót
         </button>
+
+
+        <button 
+            type="button"   
+            :disabled="!reservation.isAbleToResign" 
+            @click="resign()" 
+            class="my-5 btn btn-danger ml-15">
+            Anuluj rezerwację
+        </button>
+
     </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
     name: "history-details",
     props: {
         reservation: {},
         tickets: {},
+        price: Number
     },
     methods: {
         getDate(dateStr) {
@@ -93,6 +109,15 @@ export default {
             var date = dateStr.split(' ')
             return date[1];
         },
+        async resign() {
+            try {
+                const response = await axios.get("/reservations/resign/" + this.reservation.id)
+                this.reservation = await response.data;
+            } catch (error) {
+                console.log(error)
+            }
+            this.$router.push('/history')
+        }
     },
 };
 </script>

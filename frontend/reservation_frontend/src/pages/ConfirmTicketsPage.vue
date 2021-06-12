@@ -1,31 +1,38 @@
 <template>
+    <div>
+    <form @submit.prevent="confirm">
     <div class="d-flex flex-column align-items-center w-100">
         <top-bar></top-bar>
-        <div class="d-flex justify-content-between col-6 mt-4">
-            <dl class="row">
-                <dt class="col-5">Data przejazdu</dt>
-                <dd class="col-5">{{date}}</dd>
-                <dt class="col-5">Stacja początkowa</dt>
-                <dd class="col-5">{{fromName}}</dd>
-                <dt class="col-5">Stacja docelowa</dt>
-                <dd class="col-5">{{toName}}</dd>
-                <dt class="col-5">Godzina odjazdu</dt>
-                <dd class="col-5">{{fromTime}}</dd>
-                <dt class="col-5">Godzina przyjazdu</dt>
-                <dd class="col-5">{{toTime}}</dd>
-                <dt class="col-5">Wartość zakupu</dt>
-                <dd class="col-5">{{price}}</dd>
-            </dl>
+            <div class="d-flex justify-content-between col-6 mt-4">
+                <dl class="row">
+                    <dt class="col-5">Data przejazdu</dt>
+                    <dd class="col-5">{{date}}</dd>
+                    <dt class="col-5">Stacja początkowa</dt>
+                    <dd class="col-5">{{fromName}}</dd>
+                    <dt class="col-5">Stacja docelowa</dt>
+                    <dd class="col-5">{{toName}}</dd>
+                    <dt class="col-5">Godzina odjazdu</dt>
+                    <dd class="col-5">{{fromTime}}</dd>
+                    <dt class="col-5">Godzina przyjazdu</dt>
+                    <dd class="col-5">{{toTime}}</dd>
+                    <dt class="col-5">Wartość zakupu</dt>
+                    <dd class="col-5"><b>{{price}} PLN</b></dd>
+                </dl>
 
-            <div class="border border-dark p-3 rounded col-6">  
-                <div class="d-flex justify-content-between align-items-center border border-dark rounded p-2 m-1" v-for="pickedPlace in pickedPlacesData" :key="pickedPlace">
-                    <div>Miejsce: {{pickedPlace.placeNumber}} | Wagon: {{pickedPlace.trainCartNumber}}</div>
-                    <select v-model="pickedPlace.pricePercentage" class="form-select form-select-sm w-50">
-                        <option v-bind:value="ticketType.pricePercentage" v-for="ticketType in ticketTypes" :key="ticketType.ticketTypeId">{{ticketType.name}}</option>
-                    </select>
+                <div class="border border-dark p-3 rounded col-6">  
+                    <div class="d-flex justify-content-between align-items-center border border-dark rounded p-2 m-1" v-for="pickedPlace in pickedPlacesData" :key="pickedPlace">
+                        <div>Miejsce: {{pickedPlace.placeNumber}} | Wagon: {{pickedPlace.trainCartNumber}}</div>
+                        <select v-model="pickedPlace.ticketTypeId" class="form-select form-select-sm w-50">
+                            <option v-bind:value="ticketType.ticketTypeId" v-for="ticketType in ticketTypes" :key="ticketType.ticketTypeId">{{ticketType.name}}</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
+            <br>
+            <br>
+            <button class="btn btn-success mt-3">Potwierdź zakup</button>
+    </div>
+    </form>
     </div>
 </template>
 
@@ -81,11 +88,27 @@ export default {
 
             var sum = 0
             this.pickedPlacesData.forEach(p => {
-                sum += this.normalPrice * p.pricePercentage
+                sum += this.normalPrice * this.ticketTypes.find(element => element.ticketTypeId == p.ticketTypeId).pricePercentage
             })
 
-            return sum
+            return sum.toFixed(2)
         }  
+    },
+    methods: {
+        async confirm() {
+            const reservation = { FromId: parseInt(this.fromId), ToId: parseInt(this.toId), Places: this.pickedPlaces, TrainId: parseInt(this.trainId) }
+            var response = await axios.post("/reservations", reservation)
+
+            var resId = response.data.reservationId
+            console.log("ReservationId: " + resId)
+
+            this.$router.push({
+                    name: "result",
+                    params: {
+                        resId: resId
+                    }
+            })
+        }
     },
     props: {
         pickedPlaces: Array,
@@ -118,13 +141,13 @@ export default {
         this.fromStop = responseFrom.data
         this.toStop = responseTo.data
         this.ticketTypes = ticketTypes.data
-        this.normalPrice = responsePrice.data.price
+        this.normalPrice = responsePrice.data.price.toFixed(2)
 
         this.pickedPlacesData = this.pickedPlaces
         this.pickedPlacesData.forEach(p => {
-            this.$set(p, "pricePercentage", this.ticketTypes[0].ticketTypeId)
+            this.$set(p, "ticketTypeId", this.ticketTypes[0].ticketTypeId)
         })
-    }
+    },
 };
 </script>
 

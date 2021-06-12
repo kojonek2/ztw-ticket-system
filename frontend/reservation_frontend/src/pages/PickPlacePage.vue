@@ -3,17 +3,22 @@
         <top-bar></top-bar>
 
         <div class="d-flex justify-content-between col-6 mt-4">
-            <div class="border border-dark p-3 rounded trainCarList mt-5">
-                <div class="d-flex align-items-center border border-dark rounded p-2 m-1" v-for="trainCar in train.trainCars" :key="trainCar.trainCarsId">
-                    <div class="pre">Wagon nr. {{trainCar.number}} | Wolne: {{trainCar.car.places.filter(p => !p.occupied).length}}</div>
-                    <button class="btn btn-primary btn-sm ms-2" v-if="trainCar.trainCarsId != trainCarId" v-on:click="pickTrainCar(trainCar.trainCarsId)">Wybierz</button>
-                    <div class="flex-grow-1 text-center btn btn-sm" v-else>wybrany</div>
+            <div>
+                Dostępne wagony:
+                <hr>
+                <div class="border border-dark p-3 rounded trainCarList">
+                    <div class="d-flex align-items-center border border-dark rounded p-2 m-1" v-for="trainCar in train.trainCars" :key="trainCar.trainCarsId">
+                        <div class="pre">Wagon nr. {{trainCar.number}} | Wolne: {{getFreePlaces(trainCar)}}</div>
+                        <button class="btn btn-primary btn-sm ms-2" v-if="trainCar.trainCarsId != trainCarId" v-on:click="pickTrainCar(trainCar.trainCarsId)">Wybierz</button>
+                        <div class="flex-grow-1 text-center btn btn-sm" v-else>wybrany</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="d-flex flex-column align-items-center">
+            <div class="d-flex flex-column align-items-center ">
                 <div>
                     Wybrane miejsca:
+                    <hr>
                     <div class="border border-dark p-3 rounded trainPlacesList">
                         <div class="border border-dark rounded p-2 m-1 pre" v-for="place in pickedPlaces" :key="place.trainCartNumber.toString() + place.placeNumber.toString()">
                             Miejsce: {{place.placeNumber.toString().padStart(3, ' ')}} | Wagon: {{place.trainCartNumber.toString().padStart(3, ' ')}}
@@ -36,8 +41,8 @@
                 
             </div>
         </div>
-        
-        <div v-if="trainCarNumber != ''">Wagon nr. {{trainCarNumber}}</div>
+        <hr>
+        <div v-if="trainCarNumber != ''"><h5>Wagon nr. {{trainCarNumber}}</h5></div>
         <pick-place-canvas v-bind:train="train" :trainCarId="trainCarId" />
     </div>
 </template>
@@ -78,7 +83,7 @@ export default {
             this.train.trainCars.forEach(tc => {
                 tc.car.places.forEach(p => {
                     if (p.picked) {
-                        places.push({ trainCartNumber: tc.number, placeNumber: p.number})
+                        places.push({ trainCartNumber: tc.number, placeNumber: p.number, placeId: p.placeId, trainCarsId: tc.trainCarsId})
                     }
                 })
             })
@@ -89,6 +94,13 @@ export default {
     methods: {
         pickTrainCar: function(val) {
             this.trainCarId = val
+        },
+        getFreePlaces(trainCar) {
+            var len = trainCar.car.places.filter(p => !p.occupied).length
+            if(len < 10)
+                return "0" + len;
+            else
+                return len;
         }
     },
     async mounted() {

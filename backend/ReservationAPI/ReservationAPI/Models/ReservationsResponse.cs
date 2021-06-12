@@ -12,6 +12,11 @@ namespace ReservationAPI.Models
         public string To { get; set; }
         public string DateFrom { get; set; }
         public string DateTo { get; set; }
+        public int FromId { get; set; }
+        public int ToId { get; set; }
+        public int TrainId { get; set; }
+        public bool isAbleToResign { get; set; }
+
 
     }
 }

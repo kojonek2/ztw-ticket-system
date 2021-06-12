@@ -50,7 +50,7 @@ namespace ReservationAPI.Controllers
                 distance += connection.Distance;
             }
 
-            return Ok(new { price = distance / 4 });
+            return Ok(new { price = Math.Round(distance / 4, 2) });
         }
     }
 }
