@@ -41,11 +41,23 @@ namespace ReservationAPI
                                   });
             });
 
-            services.AddDbContextPool<ReservationsDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TrainReservationDb")));
+            services.AddDbContextPool<ReservationsDbContext>(options => options.UseSqlServer(GetConnectionString()));
 
             services.AddControllers();
 
             services.AddScoped<IUserService, UserService>();
+        }
+
+        private string GetConnectionString()
+        {
+            string connectionString = Environment.GetEnvironmentVariable("RESERVATION_APP_CONNECTION_STRING");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                connectionString = Configuration.GetConnectionString("TrainReservationDb");
+            }
+
+            return connectionString;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
