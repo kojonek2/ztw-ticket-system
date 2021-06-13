@@ -16,6 +16,7 @@ DELETE FROM dbo.Users
 SET IDENTITY_INSERT [dbo].[Trains] ON 
 INSERT [dbo].[Trains] ([TrainId], [name], [number]) VALUES (1, N'Train1', 546)
 INSERT [dbo].[Trains] ([TrainId], [name], [number]) VALUES (2, N'Testowy', 45)
+INSERT [dbo].[Trains] ([TrainId], [name], [number]) VALUES (3, N'Nowy', 45)
 SET IDENTITY_INSERT [dbo].[Trains] OFF
 
 SET IDENTITY_INSERT [dbo].[Cars] ON 
@@ -33,6 +34,9 @@ INSERT [dbo].[TrainCars] ([TrainCarsId], [Order], [number], [TrainId], [CarId]) 
 
 INSERT [dbo].[TrainCars] ([TrainCarsId], [Order], [number], [TrainId], [CarId]) VALUES (6, 1, 7, 2, 6)
 INSERT [dbo].[TrainCars] ([TrainCarsId], [Order], [number], [TrainId], [CarId]) VALUES (7, 2, 8, 2, 1)
+
+INSERT [dbo].[TrainCars] ([TrainCarsId], [Order], [number], [TrainId], [CarId]) VALUES (8, 1, 7, 3, 6)
+INSERT [dbo].[TrainCars] ([TrainCarsId], [Order], [number], [TrainId], [CarId]) VALUES (9, 2, 8, 3, 1)
 SET IDENTITY_INSERT [dbo].[TrainCars] OFF
 
 SET IDENTITY_INSERT [dbo].[Places] ON 
@@ -55,7 +59,7 @@ INSERT [dbo].[Places] ([PlaceId], [X], [Y], [Number], [Width], [Height], [CarId]
 SET IDENTITY_INSERT [dbo].[Places] OFF
 
 SET IDENTITY_INSERT [dbo].[Users] ON 
-INSERT [dbo].[Users] ([Id], [Login], [UserType], [Password], [Email], [IsAdmin]) VALUES (1, N'test', 1, N'RjHftZvTJ9OhO8ZsgBin6ABaZr4vLSLue2DIZpNQUCjqWWlf', N'a@test.com', 0)
+INSERT [dbo].[Users] ([Id], [Login], [UserType], [Password], [Email], [IsAdmin]) VALUES (1, N'test', 1, N'RjHftZvTJ9OhO8ZsgBin6ABaZr4vLSLue2DIZpNQUCjqWWlf', N'sender.246695@gmail.com', 0)
 INSERT [dbo].[Users] ([Id], [Login], [UserType], [Password], [Email], [IsAdmin]) VALUES (8, N'sender.246695@gmail.com', 2, NULL, N'sender.246695@gmail.com', 0)
 INSERT [dbo].[Users] ([Id], [Login], [UserType], [Password], [Email], [IsAdmin]) VALUES (9, N'kojonek2@gmail.com', 2, NULL, N'kojonek2@gmail.com', 0)
 INSERT [dbo].[Users] ([Id], [Login], [UserType], [Password], [Email], [IsAdmin]) VALUES (10, N'246695@student.pwr.edu.pl', 2, NULL, N'246695@student.pwr.edu.pl', 0)
@@ -95,6 +99,11 @@ INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (
 INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (8, 3, 2, '2021-06-20T15:20:00')
 INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (9, 4, 2, '2021-06-20T15:15:00')
 INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (10, 5, 2, '2021-06-20T15:10:00')
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (11, 1, 3, '2021-06-19T15:00:00')
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (12, 2, 3, '2021-06-19T15:12:00')
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (13, 3, 3, '2021-06-19T15:17:00')
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (14, 4, 3, '2021-06-19T15:25:00')
+INSERT [dbo].[Stops] ([StopId], [StationId], [TrainId], [StopDateTime]) VALUES (15, 5, 3, '2021-06-19T15:40:00')
 SET IDENTITY_INSERT [dbo].[Stops] OFF
 
 SET IDENTITY_INSERT [dbo].[TicketTypes] ON 
@@ -105,6 +114,7 @@ SET IDENTITY_INSERT [dbo].[TicketTypes] OFF
 SET IDENTITY_INSERT [dbo].[Reservations] ON 
 INSERT [dbo].[Reservations] ([ReservationId], [UserId], [FromId], [ToId]) VALUES (1, 1, 10, 6)
 INSERT [dbo].[Reservations] ([ReservationId], [UserId], [FromId], [ToId]) VALUES (2, 1, 7, 6)
+INSERT [dbo].[Reservations] ([ReservationId], [UserId], [FromId], [ToId]) VALUES (3, 1, 11, 15)
 SET IDENTITY_INSERT [dbo].[Reservations] OFF
 
 SET IDENTITY_INSERT [dbo].[PlaceReservations] ON 
@@ -112,4 +122,6 @@ INSERT [dbo].[PlaceReservations] ([PlaceReservationId], [ReservationId], [PlaceI
 INSERT [dbo].[PlaceReservations] ([PlaceReservationId], [ReservationId], [PlaceId], [TicketTypeId], [TrainCarsId]) VALUES (2, 1, 2, 2, 7)
 
 INSERT [dbo].[PlaceReservations] ([PlaceReservationId], [ReservationId], [PlaceId], [TicketTypeId], [TrainCarsId]) VALUES (3, 2, 1, 1, 7)
+
+INSERT [dbo].[PlaceReservations] ([PlaceReservationId], [ReservationId], [PlaceId], [TicketTypeId], [TrainCarsId]) VALUES (4, 3, 11, 1, 8)
 SET IDENTITY_INSERT [dbo].[PlaceReservations] OFF

@@ -98,7 +98,7 @@ export default {
         getFreePlaces(trainCar) {
             var len = trainCar.car.places.filter(p => !p.occupied).length
             if(len < 10)
-                return "0" + len;
+                return " " + len;
             else
                 return len;
         }

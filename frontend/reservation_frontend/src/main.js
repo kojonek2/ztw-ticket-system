@@ -8,6 +8,8 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import router from './router'
 
+import SortedTablePlugin from "vue-sorted-table";
+
 import getEnv from './utils/env.js'
 
 import axios from 'axios'
@@ -23,6 +25,7 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(VueRouter)
+Vue.use(SortedTablePlugin)
 
 new Vue({
   render: h => h(App),

@@ -1,8 +1,7 @@
 const { default: VueRouter } = require("vue-router");
 
 
-import Foo from './Foo.vue'
-//import Bar from './Bar.vue'
+import MainPage from './pages/MainPage.vue'
 import LoginPage from './pages/LoginPage.vue'
 import TestPage from './pages/TestPage.vue'
 import SearchPage from './pages/SearchPage.vue'
@@ -15,7 +14,7 @@ import ResultPage from './pages/ResultPage.vue'
 import auth from './auth'
 
 const routes = [
-    { path: '/', name:'home', component: Foo },
+    { path: '/', name:'home', component: MainPage },
     { path: '/search', component: SearchPage, meta: { requireLogin: true } },
     { path: '/history', component: HistoryPage, meta: { requireLogin: true } },
     { path: '/history/:id', component: HistoryDetailsPage, meta: { requireLogin: true } },

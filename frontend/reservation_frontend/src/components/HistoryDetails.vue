@@ -74,7 +74,7 @@
         <button 
             type="button"    
             @click="$router.push('/history')" 
-            class="my-5 btn btn-outline-success ml-15">&laquo; 
+            class="btn btn-outline-success">
             Powrót
         </button>
 
@@ -83,7 +83,7 @@
             type="button"   
             :disabled="!reservation.isAbleToResign" 
             @click="resign()" 
-            class="my-5 btn btn-danger ml-15">
+            class="btn btn-danger ms-1">
             Anuluj rezerwację
         </button>
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ReservationAPI.Data;
 using ReservationAPI.Models;
 using ReservationAPI.Utils;
@@ -112,11 +113,16 @@ namespace ReservationAPI.Controllers
 
             var userId = user.Id;
 
-            var reservation = _context.Reservations.First(r => r.UserId == userId && r.ReservationId == id);
+            var reservation = _context.Reservations.Include(r => r.From).FirstOrDefault(r => r.UserId == userId && r.ReservationId == id);
 
             if (reservation == null)
             {
                 return Unauthorized();
+            }
+
+            if (reservation.From.StopDateTime <= DateTime.Now)
+            {
+                return BadRequest("This reservation cannot be canceled!");
             }
 
             var places = _context.PlaceReservations.Where(pr => pr.ReservationId == id).ToList();

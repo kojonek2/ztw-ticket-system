@@ -1,13 +1,7 @@
 <template>
     <div id="History" class="d-flex flex-column align-items-center mt-2 w-100">
         <top-bar></top-bar>
-        <div v-if="error" class="alert alert-danger" role="alert">
-            Searching failed!
-        </div>
-        <div v-if="success" class="alert alert-success" role="alert">
-            Ok.
-        </div>
-
+        
         <hr>
         <history-table class="ms-5 me-5 col-6" :reservationsSource="reservations" />
 
@@ -17,7 +11,6 @@
 <script>
 import TopBar from "../components/TopBar.vue";
 import HistoryTable from '../components/HistoryTable';
-import auth from "../auth";
 import axios from 'axios'
 
 export default {
@@ -34,15 +27,10 @@ export default {
     methods: {
         async getData() {
             try {
-                const responseStations = await axios.get("/reservations", {
-                headers: {
-                    Authorization: `bearer ${auth.token}`
-                }
-            })
+                const responseStations = await axios.get("/reservations")
                 this.reservations = await responseStations.data;
             } catch (error) {
                 console.log(error)
-                //this.$router.push('/')
             }
         },
     },

@@ -44,7 +44,6 @@ export default {
                 this.reservation = await response.data;
             } catch (error) {
                 console.log(error)
-                //this.$router.push('/')
             }
         },
         async getTickets() {
@@ -57,7 +56,6 @@ export default {
                 this.tickets = await response.data;
             } catch (error) {
                 console.log(error)
-                //this.$router.push('/')
             }
         },
         async getPrice() {
@@ -66,11 +64,16 @@ export default {
                 var response = await axios.get(
                 "/price/" + this.reservation.trainId + "/" + this.reservation.fromId + "/" + this.reservation.toId
             )
-                this.price = await response.data.price;
-                console.log(this.price)
+                var price = await response.data.price;
+
+                var sum = 0;
+                this.tickets.forEach(t => {
+                    sum += t.pricePercentage * price;
+                })
+
+                this.price = sum.toFixed(2)
             } catch (error) {
                 console.log(error)
-                //this.$router.push('/')
             }
         },
     },

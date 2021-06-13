@@ -12,8 +12,7 @@
                     label-help="Użyj myszki do wskazania daty!"
                     label-calendar="Kalendarz"
                     label-today-button="Dzisiaj"
-                    today-button=true
-                    :class="{ 'has-error': submitting }"
+                    today-button
                 ></b-form-datepicker>
                 
             </div>
@@ -25,9 +24,8 @@
                     locale="pl"
                     label-no-time-selected="Wybierz godzinę odjazdu"
                     label-close-button="Zamknij"
-                    now-button=true
+                    now-button
                     label-now-button="Teraz"
-                    :class="{ 'has-error': submitting }"
                 ></b-form-timepicker>
             </div>
 
@@ -84,7 +82,7 @@ export default {
             error: false,
             success: false,
             fromStationId: -1,
-            toStationId: -2,
+            toStationId: -1,
             dateNoFormat: today,
             time: nowTime,
         };
@@ -170,5 +168,9 @@ form {
 }
 .success-message {
     color: #32a95d;
+}
+
+.has-error {
+    border-color: #a94442;
 }
 </style>
