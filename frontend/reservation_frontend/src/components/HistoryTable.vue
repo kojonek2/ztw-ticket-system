@@ -32,9 +32,6 @@
         locale="pl" 
         class="m-2"></b-form-datepicker>
 
-        {{filterStart}}
-        {{filterEnd}}
-
         <sorted-table :values="filteredReservations" class="table">
             <thead>
                 <tr>
@@ -99,8 +96,12 @@ export default {
             if (!isNaN(start)) {
                 results = results.filter(r => {
                     var st = this.getDate(r.dateFrom);
-                    var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+                    var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
                     var dt = Date.parse(st.replace(pattern,'$3-$2-$1'));
+                    if (isNaN(dt)) {
+                        var pattern2 = /(\d{2})\.(\d{2})\.(\d{4})/;
+                        dt = Date.parse(st.replace(pattern2,'$3-$2-$1'));
+                    }
 
                     return dt >= start;
                 })
@@ -109,8 +110,12 @@ export default {
             if (!isNaN(end)) {
                 results = results.filter(r => {
                     var st = this.getDate(r.dateFrom);
-                    var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+                    var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
                     var dt = Date.parse(st.replace(pattern,'$3-$2-$1'));
+                    if (isNaN(dt)) {
+                        var pattern2 = /(\d{2})\.(\d{2})\.(\d{4})/;
+                        dt = Date.parse(st.replace(pattern2,'$3-$2-$1'));
+                    }
 
                     return dt <= end;
                 })
